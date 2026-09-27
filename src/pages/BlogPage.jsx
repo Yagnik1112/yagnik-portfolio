@@ -56,20 +56,23 @@ export default function BlogPage() {
           {/* Filter Bar */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-12 p-4 rounded-2xl bg-forest-card border border-sand-subtle/30 shadow-xl">
             {/* Category Tabs */}
-            <div className="flex flex-wrap items-center gap-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-2 text-xs font-semibold rounded-full transition-all duration-300 ${
-                    activeCategory === cat
-                      ? 'bg-gold text-forest-dark shadow-md'
-                      : 'text-sand/80 hover:text-gold hover:bg-forest-dark'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              {categories.map((cat) => {
+                const isActive = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-bold rounded-full transition-all duration-300 ${
+                      isActive
+                        ? 'bg-gold text-[#0B1D17] shadow-md border border-gold font-extrabold'
+                        : 'bg-[#0B1D17] text-cream border border-sand-subtle/30 hover:border-gold hover:text-gold font-semibold'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Search Input */}

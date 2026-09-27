@@ -71,17 +71,17 @@ export default function ProjectsPage() {
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 mb-12 p-5 rounded-2xl bg-[#132E24] border border-sand-subtle/30 shadow-xl">
             
             {/* Category Tabs with explicit high-contrast text */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               {categories.map((cat) => {
                 const isActive = activeCategory === cat;
                 return (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-4 py-2 text-xs font-bold rounded-full transition-all duration-300 ${
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-bold rounded-full transition-all duration-300 ${
                       isActive
-                        ? 'bg-gold text-[#0B1D17] shadow-md border border-gold'
-                        : 'bg-[#0B1D17] text-cream border border-sand-subtle/30 hover:border-gold hover:text-gold'
+                        ? 'bg-gold text-[#0B1D17] shadow-md border border-gold font-extrabold'
+                        : 'bg-[#0B1D17] text-cream border border-sand-subtle/30 hover:border-gold hover:text-gold font-semibold'
                     }`}
                   >
                     {cat}

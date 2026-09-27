@@ -97,15 +97,15 @@ export default function SkillsSection() {
             </h2>
           </div>
 
-          {/* Category Filter Tabs with explicit high-contrast classes */}
-          <div className="flex flex-wrap items-center gap-2 bg-[#0B1D17] p-2 rounded-full border border-sand-subtle/30">
+          {/* Category Filter Tabs with responsive container border-radius */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 bg-[#0B1D17] p-2 rounded-2xl sm:rounded-full border border-sand-subtle/30">
             {categories.map((cat) => {
               const isActive = activeCategory === cat;
               return (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`px-4 py-2 text-xs font-bold rounded-full transition-all duration-300 ${
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-bold rounded-full transition-all duration-300 ${
                     isActive
                       ? 'bg-gold text-[#0B1D17] shadow-md border border-gold font-extrabold'
                       : 'bg-[#0B1D17] text-cream border border-sand-subtle/30 hover:border-gold hover:text-gold font-semibold'

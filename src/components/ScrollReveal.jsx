@@ -5,7 +5,7 @@ export default function ScrollReveal({
   className = "",
   delay = 0,
   direction = "up", // up, down, left, right, scale
-  threshold = 0.15
+  threshold = 0.01
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef(null);
@@ -20,21 +20,27 @@ export default function ScrollReveal({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting || entry.intersectionRatio > 0) {
           setIsVisible(true);
           if (elementRef.current) {
             observer.unobserve(elementRef.current);
           }
         }
       },
-      { threshold }
+      { threshold, rootMargin: '50px 0px 50px 0px' }
     );
 
     if (elementRef.current) {
       observer.observe(elementRef.current);
     }
 
+    // Safety fallback: if not triggered within 1 second (e.g. mobile viewport calculation issue), force visible
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
+
     return () => {
+      clearTimeout(timer);
       if (elementRef.current) {
         observer.unobserve(elementRef.current);
       }
