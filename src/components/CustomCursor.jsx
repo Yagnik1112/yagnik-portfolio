@@ -1,87 +1,87 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { prefersReducedMotion } from '../hooks/useMotion';
 
+const INTERACTIVE = 'a, button, [role="tab"], input, textarea, label, .interactive-card';
+
+/**
+ * Cursor follower for fine-pointer devices.
+ * Position updates are written straight to the DOM inside requestAnimationFrame,
+ * so moving the mouse never re-renders React.
+ */
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [enabled] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+      !prefersReducedMotion()
+  );
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
 
   useEffect(() => {
-    // Check if touch device or reduced motion
-    const touchCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!enabled) return undefined;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const target = { x: -100, y: -100 };
+    const ringPos = { x: -100, y: -100 };
+    let frame = 0;
+    let visible = false;
 
-    if (touchCheck || reducedMotion) {
-      setIsTouchDevice(true);
-      return;
-    }
-
-    const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
-    };
-
-    const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
-
-    const handleHoverStart = (e) => {
-      const target = e.target;
-      if (
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON' ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.closest('.interactive-card')
-      ) {
-        setIsHovered(true);
+    const render = () => {
+      ringPos.x += (target.x - ringPos.x) * 0.2;
+      ringPos.y += (target.y - ringPos.y) * 0.2;
+      dot.style.transform = `translate3d(${target.x}px, ${target.y}px, 0) translate(-50%, -50%)`;
+      ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) translate(-50%, -50%)`;
+      if (Math.abs(target.x - ringPos.x) > 0.1 || Math.abs(target.y - ringPos.y) > 0.1) {
+        frame = requestAnimationFrame(render);
+      } else {
+        frame = 0;
       }
     };
 
-    const handleHoverEnd = () => setIsHovered(false);
+    const onMove = (e) => {
+      target.x = e.clientX;
+      target.y = e.clientY;
+      if (!visible) {
+        visible = true;
+        ringPos.x = target.x;
+        ringPos.y = target.y;
+        dot.classList.add('is-visible');
+        ring.classList.add('is-visible');
+      }
+      if (!frame) frame = requestAnimationFrame(render);
+    };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
-    document.addEventListener('mouseover', handleHoverStart);
-    document.addEventListener('mouseout', handleHoverEnd);
+    const onOver = (e) => {
+      const hovering = Boolean(e.target.closest?.(INTERACTIVE));
+      dot.classList.toggle('is-hover', hovering);
+      ring.classList.toggle('is-hover', hovering);
+    };
+
+    const onLeave = () => {
+      visible = false;
+      dot.classList.remove('is-visible');
+      ring.classList.remove('is-visible');
+    };
+
+    window.addEventListener('mousemove', onMove, { passive: true });
+    document.addEventListener('mouseover', onOver, { passive: true });
+    document.documentElement.addEventListener('mouseleave', onLeave);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
-      document.removeEventListener('mouseover', handleHoverStart);
-      document.removeEventListener('mouseout', handleHoverEnd);
+      cancelAnimationFrame(frame);
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseover', onOver);
+      document.documentElement.removeEventListener('mouseleave', onLeave);
     };
-  }, [isVisible]);
+  }, [enabled]);
 
-  if (isTouchDevice || !isVisible) return null;
+  if (!enabled) return null;
 
   return (
     <>
-      {/* Small cursor dot */}
-      <div
-        className="fixed pointer-events-none z-50 rounded-full bg-gold transition-transform duration-75 ease-out"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          width: '8px',
-          height: '8px',
-          transform: `translate(-50%, -50%) scale(${isHovered ? 0.5 : 1})`,
-        }}
-      />
-      {/* Outer subtle ring */}
-      <div
-        className="fixed pointer-events-none z-50 rounded-full border border-gold/40 transition-all duration-300 ease-out"
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          width: isHovered ? '48px' : '28px',
-          height: isHovered ? '48px' : '28px',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: isHovered ? 'rgba(201, 168, 76, 0.08)' : 'transparent',
-          borderColor: isHovered ? '#C9A84C' : 'rgba(201, 168, 76, 0.35)',
-        }}
-      />
+      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
+      <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
     </>
   );
 }

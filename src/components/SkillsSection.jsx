@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { skillsData } from '../data/skillsData';
 import {
@@ -33,6 +33,10 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { GithubIcon, FigmaIcon } from './Icons';
+import SectionHeader from './SectionHeader';
+import ScrollReveal from './ScrollReveal';
+import SegmentedTabs from './SegmentedTabs';
+import Collapsible, { ExpandToggle } from './Collapsible';
 
 const iconMap = {
   ShoppingBag,
@@ -67,112 +71,122 @@ const iconMap = {
   Mail
 };
 
+const PREVIEW_GROUPS = 3;
+
+function SkillGroupCard({ group, index, wide = false }) {
+  return (
+    <div className={`skill-group ${wide ? 'skill-group-wide' : ''}`} style={{ '--i': index }}>
+      <div className="skill-group-head">
+        <div className="flex items-center gap-3">
+          <span className="skill-group-dot"></span>
+          <h3 className="skill-group-title">{group.category}</h3>
+          <span className="skill-group-count">{group.skills.length}</span>
+        </div>
+        <p className="skill-group-desc">{group.description}</p>
+      </div>
+
+      <div className="skill-chips">
+        {group.skills.map((skill) => {
+          const IconComponent = iconMap[skill.icon] || Code;
+          return (
+            <div key={skill.name} className="skill-chip group">
+              <span className="skill-chip-icon">
+                <IconComponent className="w-4 h-4" />
+              </span>
+              <span className="min-w-0">
+                <span className="skill-chip-name">{skill.name}</span>
+                <span className="skill-chip-tag">{skill.tag}</span>
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [showAll, setShowAll] = useState(false);
 
-  const categories = ["All", ...skillsData.map((s) => s.category)];
+  const categories = [
+    { value: 'All', label: 'All', count: skillsData.reduce((n, g) => n + g.skills.length, 0) },
+    ...skillsData.map((s) => ({ value: s.category, label: s.category })),
+  ];
 
-  const filteredCategories =
-    activeCategory === "All"
-      ? skillsData
-      : skillsData.filter((s) => s.category === activeCategory);
+  const isAll = activeCategory === "All";
+  const selectedGroup = skillsData.find((s) => s.category === activeCategory);
+  const activeTabIndex = categories.findIndex((c) => c.value === activeCategory);
 
   return (
-    <section id="skills" className="py-[60px] lg:py-[100px] bg-[#132E24] relative overflow-hidden border-t border-sand-subtle/30">
-      {/* Animated Ambient Background Glows */}
-      <div className="absolute top-0 left-1/4 w-[700px] h-[700px] bg-emerald-600/15 rounded-full blur-[160px] pointer-events-none animate-float-orb"></div>
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gold/10 rounded-full blur-[140px] pointer-events-none animate-pulse-glow"></div>
-      <div className="absolute inset-0 bg-dots-pattern opacity-25 pointer-events-none"></div>
-
+    <section id="skills" className="py-[100px] bg-[#ffffff] text-[#0a0a0a] relative overflow-hidden border-t border-black/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-dark border border-gold/30 text-gold text-xs font-mono tracking-widest uppercase mb-3">
-              <span>Technical Competencies</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-cream tracking-tight">
-              Skills & <span className="gold-gradient-text">Technologies</span>
-            </h2>
-          </div>
 
-          {/* Category Filter Tabs with responsive container border-radius */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 bg-[#0B1D17] p-2 rounded-2xl sm:rounded-full border border-sand-subtle/30">
-            {categories.map((cat) => {
-              const isActive = activeCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-bold rounded-full transition-all duration-300 ${
-                    isActive
-                      ? 'bg-gold text-[#0B1D17] shadow-md border border-gold font-extrabold'
-                      : 'bg-[#0B1D17] text-cream border border-sand-subtle/30 hover:border-gold hover:text-gold font-semibold'
-                  }`}
-                >
-                  {cat}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <SectionHeader
+          eyebrow="Technical Competencies"
+          title={<>Skills & <span className="text-[#0F5B4C]">Technologies</span></>}
+          className="mb-8"
+        />
 
-        <div className="flex flex-col gap-10">
-          {filteredCategories.map((catGroup) => (
-            <div
-              key={catGroup.category}
-              className="p-6 sm:p-8 rounded-2xl bg-[#0B1D17]/80 border border-sand-subtle/30 shadow-xl"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-sand-subtle/20 gap-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-gold"></div>
-                  <h3 className="text-xl font-bold text-cream tracking-wide">
-                    {catGroup.category}
-                  </h3>
+        {/* Category tabs with sliding indicator */}
+        <ScrollReveal direction="up" className="mb-10">
+          <SegmentedTabs
+            items={categories}
+            value={activeCategory}
+            onChange={setActiveCategory}
+            ariaLabel="Skill categories"
+            idPrefix="home-skills"
+          />
+        </ScrollReveal>
+
+        <div
+          id="home-skills-panel"
+          role="tabpanel"
+          aria-labelledby={`home-skills-tab-${activeTabIndex}`}
+        >
+          {isAll ? (
+            <div key="all" className="fade-swap">
+              <div className="skill-groups-grid">
+                {skillsData.slice(0, PREVIEW_GROUPS).map((group, idx) => (
+                  <SkillGroupCard key={group.category} group={group} index={idx} />
+                ))}
+              </div>
+
+              <Collapsible open={showAll} id="home-skills-more">
+                <div className="skill-groups-grid skill-groups-grid-rest">
+                  {skillsData.slice(PREVIEW_GROUPS).map((group, idx) => (
+                    <SkillGroupCard key={group.category} group={group} index={idx} />
+                  ))}
                 </div>
-                <p className="text-xs text-sand/70">
-                  {catGroup.description}
-                </p>
-              </div>
+              </Collapsible>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 sm:gap-4 gap-3">
-                {catGroup.skills.map((skill) => {
-                  const IconComponent = iconMap[skill.icon] || Code;
-                  return (
-                    <div
-                      key={skill.name}
-                      className="p-3.5 rounded-xl bg-forest-card border border-sand-subtle/20 hover:border-gold/50 transition-all duration-300 flex items-center justify-between group hover:-translate-y-0.5 shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-forest-dark transition-all">
-                          <IconComponent className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold text-cream group-hover:text-gold transition-colors">
-                            {skill.name}
-                          </div>
-                          <div className="text-[10px] text-sand/60 font-mono">
-                            {skill.tag}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="mt-8 flex justify-center">
+                <ExpandToggle
+                  open={showAll}
+                  onToggle={() => setShowAll((v) => !v)}
+                  controls="home-skills-more"
+                  moreLabel={`Show ${skillsData.length - PREVIEW_GROUPS} More Categories`}
+                  lessLabel="Show Fewer Categories"
+                />
               </div>
             </div>
-          ))}
+          ) : (
+            selectedGroup && (
+              <div key={selectedGroup.category} className="fade-swap">
+                <SkillGroupCard group={selectedGroup} index={0} wide />
+              </div>
+            )
+          )}
         </div>
 
         {/* Link to Dedicated Skills Page */}
         <div className="mt-12 text-center">
           <Link
             to="/skills"
-            className="inline-flex items-center gap-2 btn-gold text-xs px-6 py-3 font-bold"
+            className="tactile-btn tactile-btn-emerald btn-arrow px-6 py-3 text-xs font-bold"
           >
             <span>Explore Full Skills Page & Search Stack</span>
-            <ArrowRight className="w-4 h-4 text-[#0B1D17]" />
+            <ArrowRight className="w-4 h-4 text-white" />
           </Link>
         </div>
       </div>

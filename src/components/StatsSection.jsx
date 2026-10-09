@@ -1,69 +1,70 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { siteData } from '../data/siteData';
+import { prefersReducedMotion, useInView } from '../hooks/useMotion';
+import SectionHeader from './SectionHeader';
+import ScrollReveal from './ScrollReveal';
 
-export default function StatsSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
+/** Animates the numeric part of values like "60+" from 0 once `start` is true. */
+function CountUp({ value, start, duration = 1600 }) {
+  const match = /^(\d+)(.*)$/.exec(value);
+  const target = match ? Number(match[1]) : null;
+  const suffix = match ? match[2] : '';
+  const [current, setCurrent] = useState(() => (prefersReducedMotion() ? target : 0));
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
+    if (!start || target === null || prefersReducedMotion()) return undefined;
+    let frame = 0;
+    const t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / duration);
+      const eased = 1 - Math.pow(1 - p, 4);
+      setCurrent(Math.round(target * eased));
+      if (p < 1) frame = requestAnimationFrame(tick);
     };
-  }, []);
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [start, target, duration]);
+
+  if (target === null) return value;
+  return (
+    <>
+      {/* Reserve the final width so the card never shifts while counting */}
+      <span className="count-up" style={{ minWidth: `${String(target).length}ch` }}>{current}</span>
+      {suffix}
+    </>
+  );
+}
+
+export default function StatsSection() {
+  const gridRef = useRef(null);
+  const isVisible = useInView(gridRef, { rootMargin: '0px 0px -15% 0px' });
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-[60px] lg:py-[100px] bg-[#132E24] relative overflow-hidden border-y border-sand-subtle/30"
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,168,76,0.06),transparent_70%)] pointer-events-none"></div>
+    <section className="py-[100px] bg-[#f6f5f0] text-[#0a0a0a] relative overflow-hidden border-y border-black/10">
+      <div className="absolute inset-0 stats-glow pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        {/* Added Section Header */}
-        <div className="flex flex-col items-center text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#0B1D17] border border-gold/30 text-gold text-xs font-mono tracking-widest uppercase mb-3">
-            <span>Proven Track Record</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-cream tracking-tight">
-            Key Metrics & <span className="gold-gradient-text">Milestones</span>
-          </h2>
-          <p className="text-sand/80 text-xs sm:text-sm max-w-lg mt-2 text-center">
-            Verifiable development experience across international storefronts, custom apps, and technical SEO builds.
-          </p>
-        </div>
+        <SectionHeader
+          align="center"
+          eyebrow="Proven Track Record"
+          title={<>Key Metrics & <span className="text-[#0F5B4C]">Milestones</span></>}
+          subtitle="Verifiable development experience across international storefronts, custom apps, and technical SEO builds."
+        />
 
         {/* 100% Center Aligned Number Block Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-          {siteData.stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="h-full min-h-[150px] flex flex-col items-center justify-center text-center p-5 rounded-2xl bg-[#0B1D17]/80 border border-sand-subtle/30 hover:border-gold/50 transition-all duration-300 group hover:-translate-y-1 shadow-lg"
-            >
-              <div className="text-3xl sm:text-4xl font-extrabold text-gold tracking-tight mb-2 group-hover:scale-110 transition-transform duration-300 font-mono text-center">
-                {isVisible ? stat.value : "0"}
+        <div ref={gridRef}>
+          <ScrollReveal stagger direction="up" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+            {siteData.stats.map((stat) => (
+              <div key={stat.label} className="stat-card group">
+                <div className="stat-value">
+                  <CountUp value={stat.value} start={isVisible} />
+                </div>
+                <div className="stat-label">{stat.label}</div>
+                <div className="stat-desc">{stat.description}</div>
               </div>
-              <div className="text-xs sm:text-sm font-bold text-cream mb-1 leading-snug text-center">
-                {stat.label}
-              </div>
-              <div className="text-[10px] text-sand/70 leading-tight text-center">
-                {stat.description}
-              </div>
-            </div>
-          ))}
+            ))}
+          </ScrollReveal>
         </div>
 
       </div>

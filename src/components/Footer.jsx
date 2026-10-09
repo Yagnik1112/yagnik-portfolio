@@ -1,146 +1,210 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteData } from '../data/siteData';
-import { Mail, ExternalLink, ArrowUp, MessageSquare } from 'lucide-react';
+import { Mail, ExternalLink, ArrowUp, MessageSquare, ArrowRight } from 'lucide-react';
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from './Icons';
+import ScrollReveal from './ScrollReveal';
+import { useSmoothScroll } from '../utils/smoothScrollContext';
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const { scrollTo } = useSmoothScroll();
+  const scrollToTop = () => scrollTo(0);
 
   const whatsappUrl = `https://wa.me/919712847247?text=${encodeURIComponent("Hi Yagnik, I saw your portfolio and would like to connect.")}`;
 
   return (
-    <footer className="bg-[#0B1D17] border-t border-sand-subtle/30 pt-16 pb-12 text-sand/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="footer-root">
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-sand-subtle/20 items-start">
+      {/* Full-width Responsive Background Images covering entire footer */}
+      <img
+        src="/images/profile/footer_desktop.png"
+        alt=""
+        className="footer-bg-desktop"
+        loading="lazy"
+        decoding="async"
+        aria-hidden="true"
+      />
+      <img
+        src="/images/profile/footer_mobile.png"
+        alt=""
+        className="footer-bg-mobile"
+        loading="lazy"
+        decoding="async"
+        aria-hidden="true"
+      />
 
-          {/* Brand Info */}
-          <div className="md:col-span-5 flex flex-col items-start gap-3">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-forest-card border border-gold/40 flex items-center justify-center text-gold font-extrabold text-lg shadow-md">
-                Y
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-cream text-xl tracking-wide">
-                  YAGNIK BAVALIYA
-                </span>
-                <span className="text-xs text-gold font-mono uppercase tracking-wider">
-                  Shopify Developer & eCommerce Developer
-                </span>
-              </div>
-            </Link>
+      {/* Atmospheric dark gradient overlay */}
+      <div className="footer-ambient-overlay" aria-hidden="true"></div>
 
-            <p className="text-xs text-sand/70 max-w-sm mt-2 leading-relaxed">
-              Specialized Shopify 2.0 theme development, custom Liquid solutions, third-party app integrations, and technical eCommerce optimization for global brands.
-            </p>
-
-            <div className="text-xs font-mono text-sand/60 mt-1">
-              Surat, Gujarat, India
-            </div>
+      {/* ─── CTA BANNER ─── */}
+      <div className="footer-cta-banner">
+        <ScrollReveal stagger direction="up" className="footer-cta-content">
+          <div className="footer-cta-badge">
+            <span className="footer-cta-badge-dot"></span>
+            <span>Let's work together</span>
           </div>
-
-          {/* Quick Links */}
-          <div className="md:col-span-3 flex flex-col gap-3">
-            <h4 className="text-xs font-mono text-gold uppercase tracking-wider font-bold">
-              Navigation
-            </h4>
-            <div className="flex flex-col gap-2 text-xs">
-              <Link to="/about" className="hover:text-gold transition-colors">About</Link>
-              <Link to="/services" className="hover:text-gold transition-colors">Services</Link>
-              <Link to="/skills" className="hover:text-gold transition-colors">Skills</Link>
-              <Link to="/projects" className="hover:text-gold transition-colors">Projects</Link>
-              <Link to="/blog" className="hover:text-gold transition-colors">Blog</Link>
-              <Link to="/contact" className="hover:text-gold transition-colors">Contact</Link>
-            </div>
-          </div>
-
-          {/* Connect Profiles */}
-          <div className="md:col-span-4 flex flex-col gap-3">
-            <h4 className="text-xs font-mono text-gold uppercase tracking-wider font-bold">
-              Connect & Hire
-            </h4>
-            <div className="flex flex-col gap-2.5 text-xs">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-cream hover:text-emerald-400 transition-colors"
-                aria-label="WhatsApp"
-              >
-                <WhatsappIcon className="w-4 h-4 text-emerald-400" />
-                <span>WhatsApp (+91 97128 47247)</span>
-                <ExternalLink className="w-3 h-3 opacity-50" />
-              </a>
-
-              <a
-                href={siteData.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-cream hover:text-gold transition-colors"
-                aria-label="LinkedIn"
-              >
-                <LinkedinIcon className="w-4 h-4 text-gold" />
-                <span>LinkedIn</span>
-                <ExternalLink className="w-3 h-3 opacity-50" />
-              </a>
-
-              <a
-                href={siteData.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-cream hover:text-gold transition-colors"
-                aria-label="GitHub"
-              >
-                <GithubIcon className="w-4 h-4 text-gold" />
-                <span>GitHub</span>
-                <ExternalLink className="w-3 h-3 opacity-50" />
-              </a>
-
-              <a
-                href={siteData.freelancer}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-cream hover:text-gold transition-colors"
-                aria-label="Freelancer"
-              >
-                <MessageSquare className="w-4 h-4 text-gold" />
-                <span>Freelancer Profile</span>
-                <ExternalLink className="w-3 h-3 opacity-50" />
-              </a>
-
-              <a
-                href={`mailto:${siteData.email}`}
-                className="flex items-center gap-2 text-cream hover:text-gold transition-colors"
-                aria-label="Email"
-              >
-                <Mail className="w-4 h-4 text-gold" />
-                <span>yagnikbavaliya@gmail.com</span>
-              </a>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Bottom Copyright & Back to Top Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
-          <div className="text-sand/70">
-            © 2026 Yagnik Bavaliya. All rights reserved.
-          </div>
-
-          <button
-            onClick={scrollToTop}
-            className="px-4 py-2 rounded-full bg-[#132E24] border border-gold/40 text-gold hover:bg-gold hover:text-[#0B1D17] transition-all duration-300 shadow-md font-mono text-xs font-bold flex items-center gap-1.5 focus:outline-none"
-            aria-label="Back to top"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
+          <h2 className="footer-cta-heading">
+            Let's build your<br />next big idea.
+          </h2>
+          <p className="footer-cta-sub">
+            From Shopify storefronts to custom Python apps — I craft digital experiences that convert and scale.
+          </p>
+          <Link to="/contact" className="footer-glass-btn btn-arrow">
+            <span>Start a Project</span>
+            <ArrowRight className="w-4 h-4 ml-1.5" />
+          </Link>
+        </ScrollReveal>
       </div>
+
+      {/* ─── FLOATING FROSTED GLASS FOOTER PANEL ─── */}
+      <div className="footer-body">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal direction="up" className="footer-glass-panel">
+
+            <div className="footer-body-grid">
+
+              {/* Brand Info with Stylized Signature */}
+              <div className="footer-brand">
+                <Link to="/" className="brand-logo-link group" aria-label="Yagnik Bavaliya Home">
+                  <div className="brand-signature-wrap">
+                    <span className="brand-signature brand-signature-white">
+                      Yagnik
+                    </span>
+                    <svg
+                      className="brand-underline"
+                      viewBox="0 0 100 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M3 8.5C24 4.5 62 2 97 7.5"
+                        stroke="#e10600"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+
+                  <div className="brand-divider brand-divider-white"></div>
+
+                  <div className="brand-text-block">
+                    <div className="brand-name-row">
+                      <span className="brand-surname brand-surname-white">BAVALIYA</span>
+                      <span className="brand-dot"></span>
+                    </div>
+                    <span className="brand-sub brand-sub-white">
+                      WEB &amp; SHOPIFY DEV
+                    </span>
+                  </div>
+                </Link>
+
+                <p className="footer-brand-bio">
+                  Specialized Shopify 2.0 theme development, custom Liquid solutions, third-party app integrations, and technical eCommerce optimization for global brands.
+                </p>
+
+                <div className="footer-brand-location">
+                  📍 Surat, Gujarat, India
+                </div>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="footer-col">
+                <h4 className="footer-col-heading">Navigation</h4>
+                <nav aria-label="Footer navigation" className="footer-col-links footer-col-links-grid">
+                  <Link to="/about" className="footer-link">About</Link>
+                  <Link to="/services" className="footer-link">Services</Link>
+                  <Link to="/skills" className="footer-link">Skills</Link>
+                  <Link to="/projects" className="footer-link">Projects</Link>
+                  <Link to="/blog" className="footer-link">Blog</Link>
+                  <Link to="/contact" className="footer-link">Contact</Link>
+                </nav>
+              </div>
+
+              {/* Connect & Hire */}
+              <div className="footer-col">
+                <h4 className="footer-col-heading">Connect &amp; Hire</h4>
+                <div className="footer-col-links">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link footer-link-icon"
+                    aria-label="WhatsApp"
+                  >
+                    <WhatsappIcon className="w-4 h-4 text-[#25D366] shrink-0" />
+                    <span>WhatsApp</span>
+                    <ExternalLink className="w-3 h-3 opacity-40 shrink-0" />
+                  </a>
+
+                  <a
+                    href={siteData.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link footer-link-icon"
+                    aria-label="LinkedIn"
+                  >
+                    <LinkedinIcon className="w-4 h-4 text-[#0A66C2] shrink-0" />
+                    <span>LinkedIn</span>
+                    <ExternalLink className="w-3 h-3 opacity-40 shrink-0" />
+                  </a>
+
+                  <a
+                    href={siteData.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link footer-link-icon"
+                    aria-label="GitHub"
+                  >
+                    <GithubIcon className="w-4 h-4 text-white/80 shrink-0" />
+                    <span>GitHub</span>
+                    <ExternalLink className="w-3 h-3 opacity-40 shrink-0" />
+                  </a>
+
+                  <a
+                    href={siteData.freelancer}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link footer-link-icon"
+                    aria-label="Freelancer"
+                  >
+                    <MessageSquare className="w-4 h-4 text-[#00b5fd] shrink-0" />
+                    <span>Freelancer Profile</span>
+                    <ExternalLink className="w-3 h-3 opacity-40 shrink-0" />
+                  </a>
+
+                  <a
+                    href={`mailto:${siteData.email}`}
+                    className="footer-link footer-link-icon"
+                    aria-label="Email"
+                  >
+                    <Mail className="w-4 h-4 text-[#10B981] shrink-0" />
+                    <span>{siteData.email}</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Bar */}
+            <div className="footer-bottom-bar">
+              <div className="footer-copyright">
+                © {new Date().getFullYear()} Yagnik Bavaliya. All rights reserved.
+              </div>
+
+              <button
+                onClick={scrollToTop}
+                className="footer-back-top"
+                aria-label="Back to top"
+              >
+                <ArrowUp className="w-3.5 h-3.5" />
+                <span>Back to top</span>
+              </button>
+            </div>
+
+          </ScrollReveal>
+        </div>
+      </div>
+
     </footer>
   );
 }

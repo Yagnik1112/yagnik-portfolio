@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -20,9 +19,9 @@ export default function App() {
     <Router>
       <SmoothScrollProvider>
         <CustomCursor />
-        <div className="min-h-screen flex flex-col bg-[#0B1D17] text-cream selection:bg-gold selection:text-forest-dark">
+        <div className="min-h-screen flex flex-col bg-[#faf8f5] text-[#0a0a0a] selection:bg-[#0F5B4C] selection:text-white">
           <Navbar />
-          <div className="flex-grow">
+          <main id="main-content" className="flex-grow flex flex-col">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
@@ -36,7 +35,7 @@ export default function App() {
               {/* Catch-all fallback */}
               <Route path="*" element={<HomePage />} />
             </Routes>
-          </div>
+          </main>
           <Footer />
         </div>
       </SmoothScrollProvider>

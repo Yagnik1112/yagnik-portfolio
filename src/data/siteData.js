@@ -10,8 +10,9 @@ export const siteData = {
   github: "https://github.com/Yagnik1112",
   linkedin: "https://www.linkedin.com/in/yagnik-bavaliya-3b4759312/",
   freelancer: "https://www.freelancer.in/u/yagnikb4",
-  resumeUrl: "/resume/yagnik-bavaliya.pdf",
-  profileImage: "/images/profile/yagnik.jpg",
+  resumeUrl: "/resume/Yagnik Bavaliya — Professional Shopify & SEO Resume.pdf",
+  profileImage: "/images/profile/white.png",
+  profileImageDesktop: "/images/profile/dekstop.png",
   availability: [
     "Open to New Opportunities",
     "Available for Freelance Projects"
