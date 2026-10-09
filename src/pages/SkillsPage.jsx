@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SEO from '../components/SEO';
 import { skillsData } from '../data/skillsData';
 import {
@@ -34,7 +34,8 @@ import {
 } from 'lucide-react';
 import { GithubIcon, FigmaIcon } from '../components/Icons';
 import { Link } from 'react-router-dom';
-import MagneticButton from '../components/MagneticButton';
+import ScrollReveal from '../components/ScrollReveal';
+import SegmentedTabs from '../components/SegmentedTabs';
 
 const iconMap = {
   ShoppingBag,
@@ -97,77 +98,66 @@ export default function SkillsPage() {
         canonical="https://yagnik-portfolio.vercel.app/skills"
       />
 
-      <div className="py-[60px] lg:py-[100px] bg-[#0B1D17] min-h-screen relative overflow-hidden">
-        {/* Animated Ambient Background Visuals */}
-        <div className="absolute top-1/3 left-0 w-[650px] h-[650px] bg-emerald-500/15 rounded-full blur-[170px] pointer-events-none animate-float-orb"></div>
-        <div className="absolute bottom-10 right-0 w-[550px] h-[550px] bg-gold/15 rounded-full blur-[160px] pointer-events-none animate-pulse-glow"></div>
-        <div className="absolute inset-0 bg-grid-pattern opacity-25 pointer-events-none"></div>
+      <div className="page-container bg-[#faf8f5] text-[#0a0a0a]">
+        {/* Dynamic Background Orbs */}
+        <div className="absolute top-1/3 left-0 w-[650px] h-[650px] bg-[#0F5B4C]/10 rounded-full blur-[170px] pointer-events-none"></div>
+        <div className="absolute bottom-10 right-0 w-[550px] h-[550px] bg-[#10B981]/10 rounded-full blur-[160px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           {/* Header */}
-          <div className="max-w-3xl mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-card border border-gold/30 text-gold text-xs font-mono tracking-widest uppercase mb-4">
+          <div className="page-intro max-w-3xl mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0F5B4C]/10 border border-[#0F5B4C]/20 text-[#0F5B4C] text-xs font-mono tracking-widest uppercase mb-4">
               <span>Technical Competencies</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-cream tracking-tight mb-4">
-              Skills, Tools & <span className="gold-gradient-text">Technology Stack</span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-[#0a0a0a] tracking-tight mb-4">
+              Skills, Tools & <span className="text-[#0F5B4C]">Technology Stack</span>
             </h1>
-            <p className="text-sand/85 text-base sm:text-lg leading-relaxed">
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
               Categorized breakdown of development tools, languages, frameworks, and eCommerce platform capabilities used across client projects.
             </p>
           </div>
 
           {/* Filter Bar */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 mb-12 p-5 rounded-2xl bg-[#132E24] border border-sand-subtle/30 shadow-xl">
-            {/* Category Tabs */}
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              {categories.map((cat) => {
-                const isActive = activeCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-bold rounded-full transition-all duration-300 ${
-                      isActive
-                        ? 'bg-gold text-[#0B1D17] shadow-md border border-gold font-extrabold'
-                        : 'bg-[#0B1D17] text-cream border border-sand-subtle/30 hover:border-gold hover:text-gold font-semibold'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
+          <ScrollReveal direction="up" delay={250} className="filter-bar flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 mb-12 p-4 rounded-2xl bg-white border border-black/10 shadow-sm">
+            {/* Category filter with sliding indicator */}
+            <SegmentedTabs
+              mode="filter"
+              items={categories}
+              value={activeCategory}
+              onChange={setActiveCategory}
+              ariaLabel="Filter skills by category"
+            />
 
             {/* Clean Search Input */}
             <div className="relative w-full md:w-80">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gold pointer-events-none" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               <input
-                type="text"
+                type="search"
+                aria-label="Search technologies"
                 placeholder="Search technologies..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-[#0B1D17] border border-sand-subtle/30 rounded-full pl-10 pr-4 py-2.5 text-xs text-cream placeholder:text-sand/60 focus:border-gold focus:outline-none transition-colors shadow-inner"
+                className="w-full bg-gray-50 border border-gray-200 rounded-full pl-10 pr-4 py-2.5 text-xs text-[#0a0a0a] placeholder:text-gray-400 focus:border-[#0F5B4C] focus:outline-none transition-colors"
               />
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Skill Category Cards */}
-          <div className="flex flex-col gap-10 mb-20">
+          <div key={activeCategory} className="fade-swap flex flex-col gap-10 mb-20">
             {filteredCategories.map((catGroup) => (
               <div
                 key={catGroup.category}
-                className="p-6 sm:p-8 rounded-2xl bg-forest-card border border-sand-subtle/30 shadow-xl"
+                className="skill-page-group p-6 sm:p-8 rounded-2xl bg-white border border-black/10 shadow-sm"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-sand-subtle/20 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-black/10 gap-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-gold"></div>
-                    <h2 className="text-xl font-bold text-cream tracking-wide">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#0F5B4C]"></div>
+                    <h2 className="text-xl font-bold text-[#0a0a0a] tracking-wide">
                       {catGroup.category}
                     </h2>
                   </div>
-                  <p className="text-xs text-sand/70">
+                  <p className="text-xs text-gray-500">
                     {catGroup.description}
                   </p>
                 </div>
@@ -178,17 +168,17 @@ export default function SkillsPage() {
                     return (
                       <div
                         key={skill.name}
-                        className="p-4 rounded-xl bg-[#0B1D17] border border-sand-subtle/20 hover:border-gold/50 transition-all duration-300 flex items-center justify-between group shadow-sm"
+                        className="skill-chip skill-chip-lg group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-forest-dark transition-all">
-                            <IconComponent className="w-4.5 h-4.5" />
+                          <div className="skill-chip-icon">
+                            <IconComponent className="w-4 h-4" />
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-cream group-hover:text-gold transition-colors">
+                            <div className="text-xs font-bold text-[#0a0a0a] group-hover:text-[#0F5B4C] transition-colors">
                               {skill.name}
                             </div>
-                            <div className="text-[10px] text-sand/60 font-mono">
+                            <div className="text-[10px] text-gray-500 font-mono">
                               {skill.tag}
                             </div>
                           </div>
@@ -199,23 +189,26 @@ export default function SkillsPage() {
                 </div>
               </div>
             ))}
+            {filteredCategories.length === 0 && (
+              <p className="empty-state">No technologies match “{searchTerm}”.</p>
+            )}
           </div>
 
-          {/* Bottom CTA Box with proper padding, top margin, and text hierarchy matching ServicesPage */}
-          <div className="p-8 sm:p-10 lg:p-12 rounded-2xl bg-gradient-to-r from-forest-card via-[#132E24] to-[#0B1D17] border-2 border-gold/40 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-16 sm:mt-20">
+          {/* Bottom CTA Box */}
+          <ScrollReveal direction="scale" className="cta-panel p-8 sm:p-10 lg:p-12 rounded-2xl bg-gradient-to-r from-white via-emerald-50 to-[#faf8f5] border border-black/10 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-16 sm:mt-20">
             <div className="max-w-xl">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-cream leading-tight">Need specific tech stack integration?</h2>
-              <p className="text-sand/85 text-xs sm:text-sm mt-2 leading-relaxed font-medium">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a0a0a] leading-tight">Need specific tech stack integration?</h2>
+              <p className="text-gray-600 text-xs sm:text-sm mt-2 leading-relaxed font-medium">
                 Discuss your custom Liquid sections, Python apps, REST/GraphQL APIs, or headless architecture directly with Yagnik.
               </p>
             </div>
-            <MagneticButton className="shrink-0">
-              <Link to="/contact" className="btn-primary">
+            <div className="shrink-0">
+              <Link to="/contact" className="tactile-btn tactile-btn-emerald btn-arrow px-6 py-3 text-xs font-semibold flex items-center gap-2">
                 <span>Contact Me</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-white" />
               </Link>
-            </MagneticButton>
-          </div>
+            </div>
+          </ScrollReveal>
 
         </div>
       </div>

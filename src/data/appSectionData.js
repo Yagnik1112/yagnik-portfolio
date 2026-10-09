@@ -1,15 +1,17 @@
+// Homepage spotlight for the Mosaic Buddy custom application (see the "mosaic-buddy" project).
+// Presented as a Custom Application; its implementation language is intentionally not shown as a public tag.
 export const appSpotlight = {
   title: "Mosaic Buddy Inventory Management App",
-  category: "Shopify App Development • Manufacturing Integration",
-  subtitle: "Custom Machine Data Ingestion & Automated Shopify Inventory Synchronization",
-  description: "A custom inventory management application developed for a large-scale mosaic manufacturing operation. Built to bridge physical factory machinery output with automated eCommerce inventory management.",
+  category: "Custom Applications",
+  subtitle: "Machine Data Collection & Automated Shopify Inventory Synchronization",
+  description: "A custom inventory management application built for a mosaic manufacturing business. It connects the output of two production machines to the company's Shopify inventory, so stock levels stay accurate without manual counting.",
   highlights: [
-    "Fetches real-time output quantity data directly from two manufacturing machines",
-    "Empowers authorized production managers to verify and manage production output",
-    "Connects raw production metrics seamlessly with Shopify inventory API workflows",
-    "Eliminates manual inventory counting errors and overselling across channels",
-    "Engineered using Python backend architecture for reliable data processing"
+    "Collects real-time output quantities directly from two manufacturing machines",
+    "Lets authorized production managers review and adjust production output",
+    "Syncs production figures to Shopify inventory through the Shopify Admin API",
+    "Removes manual inventory counting errors and helps prevent overselling",
+    "Runs as a standalone application with webhook-driven backend data processing"
   ],
-  technologies: ["Python", "Shopify Admin API", "Machine Data Integration", "Inventory Workflows", "Webhooks"],
+  technologies: ["Shopify", "API Integration", "Inventory Management"],
   slug: "mosaic-buddy"
 };

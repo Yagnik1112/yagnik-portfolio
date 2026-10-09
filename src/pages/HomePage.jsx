@@ -1,6 +1,7 @@
-import React from 'react';
 import SEO from '../components/SEO';
 import Hero from '../components/Hero';
+import HeroTicker from '../components/HeroTicker';
+import SectionDivider from '../components/SectionDivider';
 import AboutSection from '../components/AboutSection';
 import StatsSection from '../components/StatsSection';
 import ServicesSection from '../components/ServicesSection';
@@ -10,8 +11,8 @@ import FeaturedProjects from '../components/FeaturedProjects';
 import ShopifyAppSection from '../components/ShopifyAppSection';
 import BlogSection from '../components/BlogSection';
 import ContactSection from '../components/ContactSection';
-import ScrollReveal from '../components/ScrollReveal';
 
+// Each section animates its own heading, cards and panels as they scroll into view.
 export default function HomePage() {
   return (
     <>
@@ -20,45 +21,58 @@ export default function HomePage() {
         description="Shopify Developer with 2+ years of experience building custom Shopify stores, Shopify 2.0 themes, apps, integrations and eCommerce solutions for international clients."
         canonical="https://yagnik-portfolio.vercel.app/"
       />
-      <main>
+      <div className="home-page">
+        {/* Hero Section */}
         <Hero />
-        
-        <ScrollReveal direction="up" delay={100}>
-          <AboutSection />
-        </ScrollReveal>
 
-        <ScrollReveal direction="scale" delay={150}>
-          <StatsSection />
-        </ScrollReveal>
+        {/* Ticker / What I Build For Growing Teams */}
+        <HeroTicker />
 
-        <ScrollReveal direction="up" delay={100}>
-          <ServicesSection />
-        </ScrollReveal>
+        <SectionDivider />
 
-        <ScrollReveal direction="up" delay={100}>
-          <SkillsSection />
-        </ScrollReveal>
+        {/* Proven Track Record / Key Metrics (Cream background #f6f5f0) */}
+        <StatsSection />
 
-        <ScrollReveal direction="up" delay={100}>
-          <ExperienceSection />
-        </ScrollReveal>
+        <SectionDivider />
 
-        <ScrollReveal direction="up" delay={100}>
-          <FeaturedProjects />
-        </ScrollReveal>
+        {/* Selected Portfolio Work: featured slider + expandable directory (White) */}
+        <FeaturedProjects />
 
-        <ScrollReveal direction="scale" delay={150}>
-          <ShopifyAppSection />
-        </ScrollReveal>
+        <SectionDivider />
 
-        <ScrollReveal direction="up" delay={100}>
-          <BlogSection />
-        </ScrollReveal>
+        {/* Services explorer (Cream) */}
+        <ServicesSection />
 
-        <ScrollReveal direction="up" delay={100}>
-          <ContactSection />
-        </ScrollReveal>
-      </main>
+        <SectionDivider />
+
+        {/* Technical Skills & Ecosystem: tabbed categories (White) */}
+        <SkillsSection />
+
+        <SectionDivider />
+
+        {/* Custom Shopify App Spotlight (Cream) */}
+        <ShopifyAppSection />
+
+        <SectionDivider />
+
+        {/* Work Experience Behind The Work (White) */}
+        <ExperienceSection />
+
+        <SectionDivider />
+
+        {/* About & Engineering Philosophy (Cream) */}
+        <AboutSection />
+
+        <SectionDivider />
+
+        {/* Blog & Articles slider (White) */}
+        <BlogSection />
+
+        <SectionDivider />
+
+        {/* Contact & Inquiries (Cream) */}
+        <ContactSection />
+      </div>
     </>
   );
 }
