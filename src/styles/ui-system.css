@@ -31,11 +31,40 @@
   border: 0;
 }
 
-/* Tighter vertical rhythm on phones so sections don't feel endless */
-@media (max-width: 639px) {
-  .py-\[100px\] {
-    padding-top: 72px !important;
-    padding-bottom: 72px !important;
+/* Vertical rhythm on mobile & tablet: 50px top and bottom padding instead of 100px */
+@media (max-width: 1023.98px) {
+  .py-\[100px\],
+  .pt-\[100px\] {
+    padding-top: 50px !important;
+  }
+  .py-\[100px\],
+  .pb-\[100px\] {
+    padding-bottom: 50px !important;
+  }
+
+  /* Completely remove section dividers on mobile & tablet */
+  .section-divider,
+  .section-divider.is-visible,
+  .section-divider-inner,
+  .section-divider-line,
+  .section-divider-node {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Remove dividing border lines on sections on mobile & tablet */
+  section.border-t,
+  section.border-y,
+  .projects-section.border-t,
+  .ticker.border-t {
+    border-top: none !important;
+    border-bottom: none !important;
   }
 }
 
@@ -676,13 +705,15 @@
    Section divider
    -------------------------------------------------------------------------- */
 .section-divider {
-  display: flex;
+  display: none !important;
   justify-content: center;
   width: 100%;
-  padding: 22px 0;
+  padding: 28px 0;
 }
-@media (min-width: 768px) {
-  .section-divider { padding: 28px 0; }
+@media (min-width: 1024px) {
+  .section-divider {
+    display: flex !important;
+  }
 }
 .section-divider-inner {
   position: relative;

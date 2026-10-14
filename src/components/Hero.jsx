@@ -33,8 +33,8 @@ export default function Hero() {
         />
       </div>
 
-      {/* HERO FOREGROUND CONTENT (Positioned lower to give generous breathing room below navbar) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pb-6 sm:pb-8 lg:pb-10 pt-16 sm:pt-24">
+      {/* HERO FOREGROUND CONTENT */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
 
           {/* Left Text Box */}

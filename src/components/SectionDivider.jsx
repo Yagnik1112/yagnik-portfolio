@@ -6,7 +6,7 @@ export default function SectionDivider({ className = "" }) {
   const visible = useInView(ref);
 
   return (
-    <div ref={ref} className={`section-divider ${visible ? 'is-visible' : ''} ${className}`} aria-hidden="true">
+    <div ref={ref} className={`section-divider hidden lg:flex ${visible ? 'is-visible' : ''} ${className}`} aria-hidden="true">
       <div className="section-divider-inner">
         <div className="section-divider-line"></div>
         <div className="section-divider-node">
